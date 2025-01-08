@@ -1,0 +1,38 @@
+body {
+  background-color: #272727;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  text-align: center;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 10px 20px;
+  background-color: transparent;
+  width: 100%;
+  z-index: 100;
+  align-items: center;
+}
+
+.nav-text {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+}
+
+.nav-text li {
+  color: #f8b319;
+  font-weight: bold;
+}
+
+.navbar input[type="text"] {
+  padding: 5px;
+  margin-left: 20px;
+}
