@@ -1,4 +1,4 @@
-const API_KEY = "your_api_key"; // Replace with your actual API key
+const API_KEY = "782e7fbf4b59f59d246f1e94136f1ef7"; // Replace with your actual API key
 const BASE_URL = "https://api.themoviedb.org/3";
 const searchURL = `${BASE_URL}/search/movie?api_key=${API_KEY}`;
 const genresURL = `${BASE_URL}/genre/movie/list?api_key=${API_KEY}`;
