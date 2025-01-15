@@ -1,8 +1,4 @@
-const API_KEY = "782e7fbf4b59f59d246f1e94136f1ef7"; // Replace with your actual API key
-const BASE_URL = "https://api.themoviedb.org/3";
-const searchURL = `${BASE_URL}/search/movie?api_key=${API_KEY}`;
-const genresURL = `${BASE_URL}/genre/movie/list?api_key=${API_KEY}`;
-
+// const API_KEY =  // Replace with your actual API key
 const moviesContainer = document.getElementById("movie-card");
 const searchButton = document.getElementById("search-button");
 const searchInput = document.getElementById("search");
@@ -11,8 +7,10 @@ const genreListContainer = document.getElementById("genre-list");
 // Fetch popular movies
 const fetchPopularMovies = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}`);
+    const response = await fetch(`/.netlify/functions/fetchPopularMovies`);
+    if (!response.ok) throw new Error("Failed to fetch popular movies");
     const data = await response.json();
+
     moviesContainer.innerHTML = "";
     data.results.forEach((media) => {
       const movieCard = creatMovieCard(media);
@@ -26,9 +24,12 @@ const fetchPopularMovies = async () => {
 // Fetch movies based on search query
 const fetchSearchMovies = async (query) => {
   try {
-    const response = await fetch(`${searchURL}&query=${encodeURIComponent(query)}`);
+    const response = await fetch(`/.netlify/functions/fetchSearchMovies?query=${query}`); // Passing the query parameter
+    if (!response.ok) throw new Error("Failed to fetch search results");
     const data = await response.json();
+
     moviesContainer.innerHTML = "";
+
     data.results.forEach((media) => {
       const movieCard = creatMovieCard(media);
       moviesContainer.appendChild(movieCard);
@@ -72,9 +73,15 @@ searchButton.addEventListener("click", () => {
 
 const fetchGenres = async () => {
   try {
-    const response = await fetch(genresURL);
+    const response = await fetch(`/.netlify/functions/fetchGenres`);
     const data = await response.json();
-    let genres = data.genres;
+
+    if (data.error) {
+      console.error("Error fetching genres:", data.error);
+      return;
+    }
+
+    const genres = data.genres;
     displayGenres(genres);
   } catch (error) {
     console.error("Error fetching genres:", error);
@@ -94,9 +101,12 @@ const displayGenres = (genres) => {
 
 const fetchMoviesByGenre = async (genreId) => {
   try {
-    const response = await fetch(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genreId}`);
+    const response = await fetch(`/.netlify/functions/fetchMoviesByGenre?genreId=${genreId}`);
+    if (!response.ok) throw new Error("Failed to fetch movies by genre");
     const data = await response.json();
+
     moviesContainer.innerHTML = "";
+
     data.results.forEach((media) => {
       const movieCard = creatMovieCard(media);
       moviesContainer.appendChild(movieCard);
@@ -106,6 +116,7 @@ const fetchMoviesByGenre = async (genreId) => {
   }
 };
 
+// Call fetchGenres when the page loads
 fetchGenres();
 // Load popular movies on page load
 fetchPopularMovies();
